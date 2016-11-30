@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 usage() {
     SCRIPT="$(basename $0)"
@@ -71,5 +71,7 @@ done
 if [[ -n "$PARALLEL" ]]; then
     alias xargs="parallel -j${PARALLEL} --trim lr -ud ' '"
 fi
+
+echo "all, prefixes: $prefixes"
 
 echo $prefixes | xargs -n 1 -I {} "$(dirname $0)/get-ngrams.sh" "$n" {} "$CORPUS" "$VERSION"
