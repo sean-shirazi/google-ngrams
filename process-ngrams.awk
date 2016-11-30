@@ -1,19 +1,24 @@
 #
-# Simple AWK script to process lines of the corpus and print summed instance count for each unique n-gram.
+# Simple AWK script to process lines of the corpus and print summed counts for each unique n-gram.
 #
-# NB:-
-# * n-grams containing characters other than a-z and quote are ignored.  You may wish to modify the regex.
-# * Assumes the input corpus is sorted.
-#
+BEGIN { FS = "\t" }
 {
-    if ( $1 ~ /^[a-zA-Z' ]+$/ ) {
+    if ( $2 < 2000 ) {
+        next
+    }
+    if ( $1 ~ /^[a-zA-Z']+$/ ) {
         if ( $1 == last ) {
-            count+=$3
-        } else if ( last != "" ) {
-            print last"\t"count
-            count=$3
+            matchCount+=$3
+            bookCount+=$4
+        }
+	else {
+            if ( last != "" ) {
+                print last"\t"matchCount"\t"bookCount
+            }
+            matchCount=$3
+            bookCount=$4
         }
         last=$1
     }
 }
-END { print last"\t"count }
+END { print last"\t"matchCount"\t"bookCount }

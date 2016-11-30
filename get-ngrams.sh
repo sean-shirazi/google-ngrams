@@ -14,9 +14,11 @@ VERSION=${4-$VERSION}
 echo "Fetching $prefix..."
 URL="http://storage.googleapis.com/books/ngrams/books/googlebooks-$CORPUS-${n}gram-$VERSION-${prefix}.gz"
 
+echo "$URL"
+
 curl -s "$URL" | \
     gunzip | \
-    awk -F'\t' -f "$(dirname $0)/process-ngrams.awk" | \
+    awk -f "$(dirname $0)/process-ngrams.awk" | \
     LC_ALL=C sort | \
     bzip2 > "$CORPUS-${n}gram-$VERSION-${prefix}.csv.bz2"
 
